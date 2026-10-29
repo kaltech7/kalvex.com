@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KALVEX Tech & Soluções | Tecnologia que resolve</title>
+    <meta name="description" content="KALVEX Tech & Soluções — Venda de equipamentos, desenvolvimento de sistemas web, websites profissionais e cursos de informática em Moçambique.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #14b8a6;
+            --navy: #1e3a5f;
+            --secondary: #0f172a;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 10px 40px -10px rgba(0,0,0,0.12);
+            --radius: 16px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            transition: box-shadow 0.3s;
+        }
+        .navbar.scrolled { box-shadow: var(--shadow); }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-img {
+            height: 42px;
+            width: auto;
+            display: block;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.75rem;
+            list-style: none;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-cta {
+            background: var(--primary) !important;
+            color: white !important;
+            padding: 0.55rem 1.3rem;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .nav-cta:hover { background: var(--primary-dark) !important; }
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 32px;
+            height: 24px;
+            position: relative;
+            z-index: 1001;
+        }
+        .mobile-menu-btn span {
+            display: block;
+            width: 100%;
+            height: 2.5px;
+            background: var(--secondary);
+            border-radius: 2px;
+            position: absolute;
+            left: 0;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu-btn span:nth-child(1) { top: 0; }
+        .mobile-menu-btn span:nth-child(2) { top: 10.5px; }
+        .mobile-menu-btn span:nth-child(3) { top: 21px; }
+        .mobile-menu-btn.active span:nth-child(1) {
+            top: 10.5px;
+            transform: rotate(45deg);
+        }
+        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
+        .mobile-menu-btn.active span:nth-child(3) {
+            top: 10.5px;
+            transform: rotate(-45deg);
+        }
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: white;
+            z-index: 999;
+            padding: 5rem 2rem 2rem;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .mobile-nav.open { display: flex; }
+        .mobile-nav a {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .mobile-nav a.nav-cta {
+            text-align: center;
+            margin-top: 1rem;
+            border: none;
+            color: white !important;
+        }
+        .hero {
+            padding: 7.5rem 1.5rem 4rem;
+            background: linear-gradient(160deg, #0f172a 0%, #134e4a 55%, #0f766e 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.05fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 1.1rem;
+            letter-spacing: -0.8px;
+        }
+        .hero-text h1 span { color: var(--primary-light); }
+        .hero-text p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            margin-bottom: 1.8rem;
+            max-width: 460px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.85rem 1.7rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-size: 0.98rem;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px -6px rgba(13,148,136,0.45);
+        }
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.35);
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+        }
+        .carousel-wrap {
+            position: relative;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.45);
+            aspect-ratio: 16/11;
+            background: #0f172a;
+        }
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .slide-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(15,23,42,0.92));
+            padding: 2.2rem 1.5rem 1.4rem;
+            color: white;
+        }
+        .slide-caption h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .slide-caption p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin: 0;
+        }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.1rem;
+        }
+        .dot {
+            width: 9px; height: 9px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.35);
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s;
+            padding: 0;
+        }
+        .dot.active {
+            background: var(--primary-light);
+            width: 24px;
+            border-radius: 5px;
+        }
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            z-index: 5;
+        }
+        .carousel-nav:hover { background: rgba(255,255,255,0.3); }
+        .carousel-prev { left: 12px; }
+        .carousel-next { right: 12px; }
+        section { padding: 4.5rem 1.5rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-size: 2.35rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.5px;
+        }
+        .section-header p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 580px;
+            margin: 0 auto;
+        }
+        .badge {
+            display: inline-block;
+            background: rgba(13,148,136,0.1);
+            color: var(--primary);
+            padding: 0.3rem 0.95rem;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 0.85rem;
+            letter-spacing: 0.3px;
+        }
+        .about { background: white; }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3.5rem;
+            align-items: center;
+        }
+        .about-content h3 {
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        .about-content p {
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            font-size: 1.02rem;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.8rem;
+        }
+        .stat {
+            text-align: center;
+            padding: 1.1rem 0.5rem;
+            background: var(--bg);
+            border-radius: 12px;
+        }
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.2rem;
+        }
+        .about-image img {
+            width: 100%;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .products { background: var(--bg); }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.75rem;
+        }
+        .product-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+        }
+        .product-card img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+        }
+        .product-info { padding: 1.35rem; }
+        .product-info h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.4rem;
+            color: var(--secondary);
+        }
+        .product-info p {
+            color: var(--text-light);
+            font-size: 0.92rem;
+            margin-bottom: 1.1rem;
+        }
+        .product-info .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 0.65rem;
+            font-size: 0.92rem;
+        }
+        .services-block { background: white; }
+        .service-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+        .service-row:last-child { margin-bottom: 0; }
+        .service-row.reverse { direction: rtl; }
+        .service-row.reverse > * { direction: ltr; }
+        .service-visual img {
+            width: 100%;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .service-text h3 {
+            font-size: 1.7rem;
+            color: var(--secondary);
+            margin-bottom: 0.9rem;
+        }
+        .service-text > p {
+            color: var(--text-light);
+            margin-bottom: 1.2rem;
+            font-size: 1.02rem;
+        }
+        .service-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        .service-list li {
+            padding: 0.4rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.97rem;
+        }
+        .service-list li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .support-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        .support-card {
+            background: var(--bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+        }
+        .support-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+        .support-card-body {
+            padding: 1.6rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .support-card-body h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.6rem;
+            color: var(--secondary);
+        }
+        .support-card-body p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+        .why {
+            background: linear-gradient(160deg, #0f172a 0%, #134e4a 100%);
+            color: white;
+        }
+        .why .section-header h2,
+        .why .section-header p { color: white; }
+        .why .section-header p { opacity: 0.85; }
+        .why .badge {
+            background: rgba(255,255,255,0.12);
+            color: white;
+        }
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        .why-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: var(--radius);
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+            transition: background 0.25s;
+        }
+        .why-card:hover { background: rgba(255,255,255,0.12); }
+        .why-icon {
+            width: 52px; height: 52px;
+            background: var(--primary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.1rem;
+            font-size: 1.35rem;
+        }
+        .why-card h3 { font-size: 1.1rem; margin-bottom: 0.55rem; }
+        .why-card p { opacity: 0.8; font-size: 0.92rem; }
+        .cta {
+            background: white;
+            text-align: center;
+            padding: 4.5rem 1.5rem;
+        }
+        .cta h2 {
+            font-size: 2.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--secondary);
+        }
+        .cta p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 1.8rem;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        footer {
+            background: var(--secondary);
+            color: white;
+            padding: 3rem 1.5rem 1.8rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        .footer-brand .logo-img {
+            height: 38px;
+            margin-bottom: 0.9rem;
+            filter: brightness(0) invert(1);
+        }
+        .footer-brand p {
+            opacity: 0.7;
+            font-size: 0.92rem;
+            max-width: 300px;
+        }
+        .footer-links h4 {
+            margin-bottom: 0.9rem;
+            font-size: 0.95rem;
+        }
+        .footer-links ul { list-style: none; }
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.92rem;
+            display: block;
+            padding: 0.28rem 0;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--primary-light); }
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 1.6rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            opacity: 0.55;
+            font-size: 0.88rem;
+        }
+        @media (max-width: 960px) {
+            .hero-inner,
+            .about-grid,
+            .service-row,
+            .service-row.reverse,
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+            .service-row.reverse { direction: ltr; }
+            .hero-text h1 { font-size: 2.35rem; }
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .footer-content { grid-template-columns: 1fr; gap: 1.8rem; }
+            .stats { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 600px) {
+            .hero { padding: 6.5rem 1.2rem 3rem; }
+            .hero-text h1 { font-size: 1.95rem; }
+            section { padding: 3.2rem 1.2rem; }
+            .section-header h2 { font-size: 1.85rem; }
+            .carousel-nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#">
+                <img src="206904.jpg" alt="KALVEX Tech & Soluções" class="logo-img">
+            </a>
+            <ul class="nav-links">
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#produtos">Produtos</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#cursos">Cursos</a></li>
+                <li><a href="#contacto" class="nav-cta">Contactar</a></li>
+            </ul>
+            <button class="mobile-menu-btn" id="menuBtn" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#sobre" onclick="closeMenu()">Sobre</a>
+        <a href="#produtos" onclick="closeMenu()">Produtos</a>
+        <a href="#servicos" onclick="closeMenu()">Serviços</a>
+        <a href="#cursos" onclick="closeMenu()">Cursos</a>
+        <a href="#contacto" class="nav-cta" onclick="closeMenu()">Contactar</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-text">
+                <h1>Tecnologia que <span>resolve</span></h1>
+                <p>Equipamentos de qualidade, sistemas web personalizados, websites profissionais e formação em informática para particulares, empresas e instituições.</p>
+                <div class="hero-buttons">
+                    <a href="https://wa.me/258846967603" class="btn btn-primary" target="_blank" rel="noopener">Falar no WhatsApp</a>
+                    <a href="#servicos" class="btn btn-outline">Ver serviços</a>
+                </div>
+            </div>
+            <div>
+                <div class="carousel-wrap">
+                    <div class="carousel-track" id="carouselTrack">
+                        <div class="carousel-slide">
+                            <img src="279837.jpg" alt="Laptops e computadores">
+                            <div class="slide-caption">
+                                <h3>Equipamentos de qualidade</h3>
+                                <p>Laptops HP, Dell, Lenovo e mais — prontos para estudo e trabalho</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="280117.jpg" alt="Montagem de hardware">
+                            <div class="slide-caption">
+                                <h3>Suporte técnico de hardware</h3>
+                                <p>Diagnóstico, reparação e montagem com técnicos experientes</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="279979.jpg" alt="Ambiente de desenvolvimento">
+                            <div class="slide-caption">
+                                <h3>Sistemas web e software</h3>
+                                <p>Soluções digitais personalizadas para negócios e instituições</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="280118.jpg" alt="Desenvolvimento web">
+                            <div class="slide-caption">
+                                <h3>Websites e landing pages</h3>
+                                <p>Presença digital profissional que converte visitantes em clientes</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="279439.jpg" alt="Laptop Lenovo">
+                            <div class="slide-caption">
+                                <h3>Escolha o equipamento certo</h3>
+                                <p>Orientação personalizada de acordo com a sua necessidade e orçamento</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-nav carousel-prev" id="prevBtn" aria-label="Anterior">‹</button>
+                    <button class="carousel-nav carousel-next" id="nextBtn" aria-label="Seguinte">›</button>
+                </div>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="sobre">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <span class="badge">Sobre nós</span>
+                    <h3>KALVEX Tech & Soluções</h3>
+                    <p>Somos uma empresa dedicada à comercialização de equipamentos tecnológicos, ao desenvolvimento de soluções digitais e à formação em informática.</p>
+                    <p>Trabalhamos para facilitar o acesso à tecnologia e ajudar clientes a escolher, configurar, utilizar e manter os seus equipamentos e sistemas de forma adequada. Atendemos particulares, profissionais, empresas e instituições.</p>
+                    <div class="stats">
+                        <div class="stat">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Orientado ao cliente</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">Web + TI</div>
+                            <div class="stat-label">Soluções completas</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">Prática</div>
+                            <div class="stat-label">Formação real</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="279725.jpg" alt="Laptop profissional KALVEX">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="products" id="produtos">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Equipamentos</span>
+                <h2>Produtos em destaque</h2>
+                <p>Laptops, computadores e equipamentos de qualidade para estudo, trabalho e uso diário. Consulte disponibilidade e preços.</p>
+            </div>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="279725.jpg" alt="Laptop Intel">
+                    <div class="product-info">
+                        <h3>Laptops Novos e Seminovos</h3>
+                        <p>Modelos HP, Dell, Lenovo e mais. Ideal para estudo, trabalho e produtividade.</p>
+                        <a href="https://wa.me/258846967603?text=Olá! Gostaria de saber sobre laptops disponíveis." class="btn btn-primary" target="_blank">Consultar disponibilidade</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="279439.jpg" alt="Lenovo">
+                    <div class="product-info">
+                        <h3>Lenovo IdeaPad & ThinkPad</h3>
+                        <p>Desempenho fiável, design moderno e ótima relação qualidade-preço.</p>
+                        <a href="https://wa.me/258846967603?text=Olá! Interesse em Lenovo." class="btn btn-primary" target="_blank">Consultar modelos</a>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="279837.jpg" alt="Vários laptops">
+                    <div class="product-info">
+                        <h3>HP, Dell e outras marcas</h3>
+                        <p>Grande variedade de portáteis e desktops para todas as necessidades.</p>
+                        <a href="https://wa.me/258846967603?text=Olá! Quero ver os equipamentos disponíveis." class="btn btn-primary" target="_blank">Ver opções</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-block" id="servicos">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Soluções Digitais</span>
+                <h2>Desenvolvimento de Sistemas Web</h2>
+                <p>Soluções digitais para pessoas, empresas e instituições.</p>
+            </div>
+            <div class="service-row">
+                <div class="service-visual">
+                    <img src="279979.jpg" alt="Sistemas web e desenvolvimento">
+                </div>
+                <div class="service-text">
+                    <h3>Sistemas web personalizados</h3>
+                    <p>A KALVEX Tech & Soluções desenvolve sistemas web personalizados para simplificar tarefas, organizar informações e melhorar a gestão de atividades.</p>
+                    <ul class="service-list">
+                        <li>Sistemas para negócios: vendas, clientes e controlo de stock</li>
+                        <li>Sistemas para farmácias: registo de medicamentos e gestão de stock</li>
+                        <li>Sistemas para instituições: registos, gestão de informações e acompanhamento de processos</li>
+                        <li>Sistemas personalizados: soluções adaptadas às necessidades específicas de cada cliente</li>
+                        <li>Websites profissionais: páginas para apresentar empresas, serviços e projetos</li>
+                    </ul>
+                    <p style="margin-bottom:1.2rem;color:var(--text-light);">Tem uma ideia? Nós ajudamos a transformá-la numa solução digital.</p>
+                    <a href="https://wa.me/258846967603?text=Olá! Gostaria de solicitar uma proposta de sistema web / website." class="btn btn-primary" target="_blank">Solicitar uma proposta</a>
+                </div>
+            </div>
+            <div class="service-row reverse">
+                <div class="service-visual">
+                    <img src="280118.jpg" alt="Websites e landing pages">
+                </div>
+                <div class="service-text">
+                    <h3>Websites & Landing Pages</h3>
+                    <p>Presença digital profissional, rápida e orientada a resultados.</p>
+                    <ul class="service-list">
+                        <li>Websites profissionais</li>
+                        <li>Landing pages de conversão</li>
+                        <li>Redesign de websites existentes</li>
+                        <li>Manutenção e atualização de sites</li>
+                    </ul>
+                    <a href="https://wa.me/258846967603?text=Olá! Preciso de um website ou landing page." class="btn btn-primary" target="_blank">Pedir orçamento</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-block" id="cursos" style="background:var(--bg);">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Formação</span>
+                <h2>Cursos de Informática</h2>
+                <p>Aprenda hoje. Utilize todos os dias.</p>
+            </div>
+            <div class="service-row">
+                <div class="service-visual">
+                    <img src="279980.jpg" alt="Formação em informática">
+                </div>
+                <div class="service-text">
+                    <h3>Formação prática para todos</h3>
+                    <p>Formação prática para crianças, jovens e adultos que desejam desenvolver competências digitais e utilizar o computador com mais confiança.</p>
+                    <ul class="service-list">
+                        <li>Informática Básica: computador, ficheiros e programas</li>
+                        <li>Microsoft Word: criação e formatação de documentos</li>
+                        <li>Microsoft Excel: tabelas, fórmulas e cálculos</li>
+                        <li>Internet e E-mail: pesquisa, comunicação e envio de documentos</li>
+                        <li>Informática para Crianças e Jovens: competências digitais e trabalhos escolares</li>
+                        <li>Informática para o Trabalho: currículos, documentos profissionais e ferramentas digitais</li>
+                    </ul>
+                    <p style="margin-bottom:1.2rem;color:var(--text-light);">Formação orientada para a prática, com conteúdos ajustados ao nível e aos objetivos de cada formando.</p>
+                    <a href="https://wa.me/258846967603?text=Olá! Gostaria de consultar cursos de informática e disponibilidade." class="btn btn-primary" target="_blank">Consultar cursos e disponibilidade</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-block">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Suporte Técnico</span>
+                <h2>Hardware & Assistência</h2>
+                <p>Diagnóstico, reparação e manutenção de computadores e equipamentos.</p>
+            </div>
+            <div class="support-grid">
+                <div class="support-card">
+                    <img src="280117.jpg" alt="Montagem e reparação de hardware">
+                    <div class="support-card-body">
+                        <h3>Reparação de Hardware</h3>
+                        <p>Diagnóstico preciso, substituição de componentes, limpeza, manutenção preventiva e recuperação de dados.</p>
+                        <a href="https://wa.me/258846967603?text=Olá! Preciso de suporte técnico de hardware." class="btn btn-primary" target="_blank">Pedir suporte</a>
+                    </div>
+                </div>
+                <div class="support-card">
+                    <img src="279980.jpg" alt="Configuração e software">
+                    <div class="support-card-body">
+                        <h3>Configuração & Software</h3>
+                        <p>Instalação de sistemas, otimização de desempenho, configuração de periféricos e soluções para empresas.</p>
+                        <a href="https://wa.me/258846967603?text=Olá! Preciso de configuração / software." class="btn btn-primary" target="_blank">Falar com especialista</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why">
+        <div class="container">
+            <div class="section-header">
+                <span class="badge">Porquê a KALVEX</span>
+                <h2>Tecnologia com responsabilidade</h2>
+                <p>Mais do que vender, orientamos e acompanhamos.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-icon">🎯</div>
+                    <h3>Atendimento orientado</h3>
+                    <p>Compreendemos a sua necessidade antes de recomendar qualquer produto ou serviço.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">💡</div>
+                    <h3>Soluções adequadas</h3>
+                    <p>Nem sempre o mais caro é o melhor. Recomendamos o que realmente serve o seu uso e orçamento.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🛠️</div>
+                    <h3>Suporte contínuo</h3>
+                    <p>A nossa relação não termina na venda. Estamos disponíveis para suporte e assistência técnica.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">✅</div>
+                    <h3>Transparência</h3>
+                    <p>Informamos claramente características, condições e disponibilidade antes de qualquer compromisso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contacto">
+        <div class="container">
+            <h2>Precisa de tecnologia?</h2>
+            <p>Equipamento, sistema web, website, formação ou suporte técnico? Fale connosco. Estamos prontos para ajudar.</p>
+            <a href="https://wa.me/258846967603" class="btn btn-primary" target="_blank" rel="noopener" style="font-size:1.05rem;padding:1rem 2.1rem;">
+                Contactar agora no WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="206904.jpg" alt="KALVEX" class="logo-img">
+                <p>Tecnologia que resolve. Equipamentos, sistemas web, websites e formação em informática para particulares e empresas.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#produtos">Produtos</a></li>
+                    <li><a href="#servicos">Serviços</a></li>
+                    <li><a href="#cursos">Cursos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="https://wa.me/258846967603" target="_blank">WhatsApp: +258 84 696 7603</a></li>
+                    <li><a href="#">Moçambique</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 KALVEX Tech & Soluções. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            mobileNav.classList.toggle('open');
+            document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+        });
+        function closeMenu() {
+            menuBtn.classList.remove('active');
+            mobileNav.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+        });
+        const track = document.getElementById('carouselTrack');
+        const slides = track.children;
+        const dotsContainer = document.getElementById('carouselDots');
+        let current = 0;
+        const total = slides.length;
+        for (let i = 0; i < total; i++) {
+            const dot = document.createElement('button');
+            dot.className = 'dot' + (i === 0 ? ' active' : '');
+            dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+            dot.addEventListener('click', () => goTo(i));
+            dotsContainer.appendChild(dot);
+        }
+        const dots = dotsContainer.children;
+        function goTo(index) {
+            current = (index + total) % total;
+            track.style.transform = `translateX(-${current * 100}%)`;
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].classList.toggle('active', i === current);
+            }
+        }
+        document.getElementById('prevBtn').addEventListener('click', () => goTo(current - 1));
+        document.getElementById('nextBtn').addEventListener('click', () => goTo(current + 1));
+        let autoplay = setInterval(() => goTo(current + 1), 4500);
+        track.parentElement.addEventListener('mouseenter', () => clearInterval(autoplay));
+        track.parentElement.addEventListener('mouseleave', () => {
+            autoplay = setInterval(() => goTo(current + 1), 4500);
+        });
+    </script>
+</body>
+</html>
